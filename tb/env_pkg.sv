@@ -5,5 +5,6 @@ package env_pkg;
    
    `include "uvm_macros.svh"
    `include "timer_scoreboard.sv"
+   `include "timer_coverage.sv"
    `include "timer_environment.sv"
 endpackage

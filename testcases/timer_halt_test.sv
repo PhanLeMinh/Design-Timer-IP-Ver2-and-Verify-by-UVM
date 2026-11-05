@@ -17,8 +17,8 @@ class timer_halt_test extends apb_base_test;
    virtual task run_phase(uvm_phase phase);
       phase.raise_objection(this);
       
-      timer_vif.dbg_mode = 1'b1;
       halt_seq.regmodel = timer_env.reg_model;
+      halt_seq.timer_vif = timer_vif;
       halt_seq.start(timer_env.apb_agt.apb_seq);
 
       phase.drop_objection(this);

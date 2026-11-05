@@ -2,6 +2,7 @@ class timer_halt_seq  extends uvm_sequence;
    `uvm_object_utils(timer_halt_seq)
 
    timer_reg_block regmodel;
+   virtual timer_if timer_vif;
 
    rand bit halt_req;
    rand bit div_en;
@@ -39,6 +40,9 @@ class timer_halt_seq  extends uvm_sequence;
       if(regmodel == null) begin
          `uvm_fatal(msg,"Need assign regmodel")
       end
+      
+      #50ns;
+      timer_vif.dbg_mode = 1'b1;
       regmodel.TCMP0.write(status,tcmp0_val);
       regmodel.TCMP1.write(status,tcmp1_val);
       tcr_val = {prescaler,4'b0,div_val,4'b0,div_mode,pwm_en,div_en,1'b1};
@@ -47,12 +51,20 @@ class timer_halt_seq  extends uvm_sequence;
       regmodel.THCSR.write(status,{31'h0,halt_req});
       regmodel.THCSR.read(status,rdata);
       if(rdata[1] == 1'b1) begin 
-        `uvm_info(msg,"Halt ack is asserted",UVM_LOW)
+        `uvm_info(msg,"TEST PASSED: Halt ack is asserted",UVM_LOW)
       end
       else begin
-         `uvm_error(msg,"FAIL");
+         `uvm_error(msg,"TEST FAILED");
       end
-      #20ns;
+      #50ns;
+      timer_vif.dbg_mode = 1'b0;
+      regmodel.THCSR.read(status,rdata);
+      if(rdata[1] == 1'b0) begin
+        `uvm_info(msg,"TEST PASSED: Halt ack not effect",UVM_LOW)
+      end
+      else begin
+         `uvm_error(msg,"TEST FAILED: Halt ack change not 1 -> 0");
+      end
       regmodel.THCSR.write(status,32'h0);
       #50ns;
    endtask

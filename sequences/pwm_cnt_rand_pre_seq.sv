@@ -5,6 +5,7 @@ class pwm_cnt_rand_pre_seq extends uvm_sequence;
 
    rand bit [31:0] tcmp0_val;
    rand bit [31:0] tcmp1_val;
+   rand bit [31:0] tdr0_val;
    rand bit [15:0] prescaler;
    rand bit div_mode;
    rand bit int_en;
@@ -22,11 +23,11 @@ class pwm_cnt_rand_pre_seq extends uvm_sequence;
 
    constraint prescaler_c{
       prescaler dist{
-         16'd0              := 5,
-	 16'd1              := 5,
+         16'd0              := 1,
+	 16'd1              := 1,
 	 [16'd2  :16'd15]   := 40,
-	 [16'd16 :16'd255]  := 35,
-	 [16'd256:16'd1024] := 14,
+	 [16'd16 :16'd255]  := 40,
+	 [16'd256:16'd1024] := 17,
 	 16'hFFFF           := 1
       };
    }
@@ -35,14 +36,14 @@ class pwm_cnt_rand_pre_seq extends uvm_sequence;
       if(prescaler > 16'd255) 
          tcmp0_val inside {[32'd1:32'd5]};
       else
-         tcmp0_val inside {[32'd5:32'd50]};
+         tcmp0_val inside {[32'd1:32'd30]};
    }
 
    constraint tcmp1_val_c{
       tcmp1_val <= tcmp0_val;
    }
 
-   local string msg = "TIMER_RANDOM_PRESCALER_SEQUENCE";
+   local string msg = "PWM_RANDOM_PRESCALER_SEQUENCE";
 
    function new(string name = "pwm_cnt_rand_pre_seq");
       super.new(name);
@@ -68,23 +69,24 @@ class pwm_cnt_rand_pre_seq extends uvm_sequence;
 	    #50ns;
 	    regmodel.TISR.read(status,rdata);
 	    if(rdata[1] == 1'b1) begin
-	       `uvm_info(msg,"Timer interrupt is asserted",UVM_LOW)
+	       `uvm_info(msg,"PWM interrupt is asserted",UVM_LOW)
 	       break;
 	    end
 	 end
 	 begin
 	    #1000us;
-	    `uvm_fatal(msg,"Timer interrupt is NOT asserted")
+	    `uvm_fatal(msg,"PWM interrupt is NOT asserted")
 	 end
       join_any
       disable fork;
 
+      regmodel.TDR0.read(status,tdr0_val);
       regmodel.TISR.write(status,32'h0000_0002);
       regmodel.TISR.read(status,rdata);
-      if(rdata[0] == 1'b0) begin
-         `uvm_info(msg,"Timer interrupt is deleted to 0",UVM_LOW)
+      if(rdata[1] == 1'b0) begin
+         `uvm_info(msg,"PWM interrupt is deleted to 0",UVM_LOW)
       end else begin
-         `uvm_error(msg,"Timer interrupt is NOT deleted!!!")
+         `uvm_error(msg,"PWM interrupt is NOT deleted!!!")
       end
 
    endtask

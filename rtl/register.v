@@ -9,6 +9,7 @@ module register(
 	input [63:0] cnt, //from counter
 	input [31:0] tdr0_pwm_cnt, //from pwm_counter
 	input pwm_period_match, // from pwm_counter
+	input cnt_en, // from counter control
 	input debug_mode,
 	output pwm_int,
 	output tim_int,
@@ -139,10 +140,10 @@ assign prescaler_tmp[7: 0] = (pstrb[2] & wr_en & reg_sel[0] & ~pslverr) ? wdata[
 assign prescaler_tmp[15:8] = (pstrb[3] & wr_en & reg_sel[0] & ~pslverr) ? wdata[31:24] : prescaler[15:8];
 
 // Error
-assign div_val_err = (pstrb[1] & reg_sel[0]) & (wdata[11:8] > 8);
+assign div_val_err          = (pstrb[1] & wr_en & reg_sel[0]) & (wdata[11:8] > 8);
 assign div_val_timer_en_err = (pstrb[1] & wr_en & reg_sel[0]) & (wdata[11:8] != div_val) & timer_en;
-assign div_en_timer_en_err = (pstrb[0] & wr_en & reg_sel[0]) & (wdata[1] != div_en) & timer_en;
-assign pwm_en_timer_en_err = (pstrb[0] & wr_en & reg_sel[0]) & (wdata[3] != pwm_en) & timer_en;
+assign div_en_timer_en_err  = (pstrb[0] & wr_en & reg_sel[0]) & (wdata[1] != div_en) & timer_en;
+assign pwm_en_timer_en_err  = (pstrb[0] & wr_en & reg_sel[0]) & (wdata[3] != pwm_en) & timer_en;
 assign pslverr = div_val_err | div_val_timer_en_err | div_en_timer_en_err | pwm_en_timer_en_err;
 // TCR
 
@@ -230,7 +231,7 @@ end
 // reg_sel[6]
 // Bit[0] int_st
 // Bit[1] pwm_int_st - flag interrupt of PWM
-assign int_set = (cnt == compare_val);
+assign int_set = (cnt == compare_val) & cnt_en;
 assign int_clr = pstrb[0] & wr_en & wdata[0] & reg_sel[6];
 assign pwm_clr = pstrb[0] & wr_en & wdata[1] & reg_sel[6]; 
 assign int_st  = tisr_r[0]; 
@@ -242,7 +243,8 @@ begin
 	if(!rst_n) begin
 		tisr_r <= TISR_DEFAULT;
 	end
-	if(pwm_en) begin
+	else begin 
+	     if(pwm_en) begin
 		if(pwm_clr) begin
 			tisr_r[1] <= 1'b0;
 		end
@@ -252,8 +254,8 @@ begin
 		else begin
 			tisr_r[1] <= tisr_r[1];
 		end
-	end 
-	else begin	
+	     end 
+	     else begin	
 		if(int_clr) begin
                 	tisr_r[0] <= 1'b0;
         	end else if(int_set) begin
@@ -262,7 +264,8 @@ begin
         	else begin
                 	tisr_r[0] <= tisr_r[0];
 		end
-	end
+	     end
+        end
 end
 
 // Interrupt

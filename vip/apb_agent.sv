@@ -6,6 +6,7 @@ class apb_agent extends uvm_agent;
 	apb_sequencer apb_seq;
 
 	virtual apb_if apb_vif;
+	virtual timer_if timer_vif;
 	apb_configuration apb_cfg;
 
 	function new(string name = "apb_agent", uvm_component parent);
@@ -16,6 +17,8 @@ class apb_agent extends uvm_agent;
 		super.build_phase(phase);
 		if(!uvm_config_db#(virtual apb_if)::get(this,"","apb_vif",apb_vif))
 		   `uvm_fatal(get_type_name(),"Failed to get apb_vif from uvm_config_db")
+		if(!uvm_config_db#(virtual timer_if)::get(this,"","timer_vif",timer_vif))
+                   `uvm_fatal(get_type_name(),"Failed to get timer_vif from uvm_config_db")
 		if(!uvm_config_db#(apb_configuration)::get(this,"","apb_cfg",apb_cfg))
                    `uvm_fatal(get_type_name(),"Failed to get apb_cfg from uvm_config_db")
 
@@ -27,6 +30,8 @@ class apb_agent extends uvm_agent;
 
 		   uvm_config_db#(virtual apb_if)::set(this,"apb_driver","apb_vif",apb_vif);
 		   uvm_config_db#(virtual apb_if)::set(this,"apb_monitor","apb_vif",apb_vif);
+		   uvm_config_db#(virtual timer_if)::set(this,"apb_driver","timer_vif",timer_vif);
+                   uvm_config_db#(virtual timer_if)::set(this,"apb_monitor","timer_vif",timer_vif);
 		   uvm_config_db#(apb_configuration)::set(this,"apb_driver","apb_cfg",apb_cfg);
 		   uvm_config_db#(apb_configuration)::set(this,"apb_monitor","apb_cfg",apb_cfg);
 		end
@@ -35,6 +40,7 @@ class apb_agent extends uvm_agent;
 		   apb_mon = apb_monitor::type_id::create("apb_monitor",this);
 
 		   uvm_config_db#(virtual apb_if)::set(this,"apb_monitor","apb_vif",apb_vif);
+		   uvm_config_db#(virtual timer_if)::set(this,"apb_monitor","timer_vif",timer_vif);
 		   uvm_config_db#(apb_configuration)::set(this,"apb_monitor","apb_cfg",apb_cfg);
 		end
 	endfunction

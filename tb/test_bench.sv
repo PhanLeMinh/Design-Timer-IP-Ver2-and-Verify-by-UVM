@@ -3,6 +3,7 @@
 module test_bench;
    import uvm_pkg::*;
    import apb_pkg::*;
+   import test_pkg::*;
 
 
    /** Instance APB Interface */
@@ -39,6 +40,16 @@ module test_bench;
       apb_vif.prst_n = 0;
       #20;
       apb_vif.prst_n = 1;
+   end
+
+   initial begin
+      timer_vif.dbg_mode = 0;
+      apb_vif.psel   = 0;
+      apb_vif.pwrite = 0;
+      apb_vif.penable= 0;
+      apb_vif.paddr  = 0;
+      apb_vif.pwdata = 0;
+      apb_vif.pstrb  = 0;
    end
 
    /** Set VIP interface on the environment */

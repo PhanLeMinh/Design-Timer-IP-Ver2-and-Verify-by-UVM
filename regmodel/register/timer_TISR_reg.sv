@@ -16,8 +16,8 @@ class timer_TISR_reg extends uvm_reg;
 
       // configure(parent, size, lsb_pos, access, volatile, reset, has_reset, is_rand, individually_accessible)
       rsvd.configure(this      ,30,2,"RO" ,0,31'h0,1,0,1);
-      pwm_int_st.configure(this, 1,1,"R1C",1,1'b0 ,1,1,1);
-      int_st.configure(this    , 1,0,"R1C",1,1'b0 ,1,1,1);
+      pwm_int_st.configure(this, 1,1,"W1C",1,1'b0 ,1,1,1);
+      int_st.configure(this    , 1,0,"W1C",1,1'b0 ,1,1,1);
 
    endfunction
 

@@ -21,18 +21,18 @@ class timer_cnt_rand_pre_seq extends uvm_sequence;
 
    constraint prescaler_c{
       prescaler dist{
-         16'd0              := 5,
-	 16'd1              := 5,
+         16'd0              := 1,
+	 16'd1              := 1,
 	 [16'd2  :16'd15]   := 40,
-	 [16'd16 :16'd255]  := 35,
-	 [16'd256:16'd1024] := 14,
+	 [16'd16 :16'd255]  := 40,
+	 [16'd256:16'd1024] := 17,
 	 16'hFFFF           := 1
       };
    }
 
    constraint tcmp0_val_c{
       if(prescaler > 16'd255) 
-         tcmp0_val inside {[32'd1:32'd5]};
+         tcmp0_val inside {[32'd1:32'd2]};
       else
          tcmp0_val inside {[32'd5:32'd50]};
    }

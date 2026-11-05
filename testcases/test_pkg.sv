@@ -4,6 +4,7 @@ package test_pkg;
    import env_pkg::*;
    import apb_pkg::*;
    import seq_pkg::*;
+   import timer_regmodel_pkg::*;
 
    `include "apb_base_test.sv"
    `include "reg_def_test.sv"
@@ -43,5 +44,15 @@ package test_pkg;
    `include "pwm_cnt_rand_pre_test.sv"
 
    `include "timer_halt_test.sv"
+   `include "pwm_halt_test.sv"
+
+   `include "illegal_div_val_test.sv"
+   `include "on_the_fly_write_test.sv"
+   `include "timer_cnt_load_test.sv"
+   `include "tdr_pstrb_test.sv"
+   `include "timer_disable_test.sv"
+   `include "unmapped_addr_test.sv"
+   `include "int_mask_test.sv"
+   `include "tcmp_max_test.sv"
 
 endpackage

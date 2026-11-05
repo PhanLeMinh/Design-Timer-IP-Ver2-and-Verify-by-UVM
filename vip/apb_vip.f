@@ -1,3 +1,4 @@
 +incdir+./../vip/
-./../vip/apb_pkg.sv
+./../vip/timer_interface.sv
 ./../vip/apb_interface.sv
+./../vip/apb_pkg.sv

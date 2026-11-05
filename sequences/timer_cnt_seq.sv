@@ -16,9 +16,16 @@ class timer_cnt_seq extends uvm_sequence;
    }
    
    constraint tcmp_c {
-      tcmp0_val inside {[32'd5:32'd300]};
-      tcmp1_val == 32'b0;
+      if(div_val inside {[4'd0:4'd4]}) 
+         tcmp0_val inside {[32'd1:32'd100]};
+      else 
+        tcmp0_val inside {[32'd1:32'd5]};
    }
+
+   constraint tcmp1_val_c{
+      soft tcmp1_val == 32'h0;
+   }
+
 
    constraint c_default {
       soft div_en == 1;

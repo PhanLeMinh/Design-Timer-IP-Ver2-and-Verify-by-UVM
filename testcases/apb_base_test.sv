@@ -29,9 +29,17 @@ class apb_base_test extends uvm_test;
       uvm_config_db#(virtual timer_if)::set(this,"timer_env","timer_vif",timer_vif);
       uvm_config_db#(apb_configuration)::set(this,"timer_env","apb_cfg",apb_cfg);
 
-
    endfunction
 
+   task write_reg_strobe(uvm_reg rg, bit [31:0] data, bit [3:0] pstrb);
+       apb_reg_extension ext;
+       uvm_status_e status;
+
+       ext = new();
+       ext.pstrb = pstrb;
+       rg.write(status, data, .extension(ext));
+   endtask
+   
    virtual function void start_of_simulation_phase(uvm_phase phase);
       `uvm_info(get_type_name(),"Start_of_simulation_phase: Entered...", UVM_HIGH)
       uvm_top.print_topology();

@@ -21,10 +21,10 @@ class apb_monitor extends uvm_monitor;
    virtual task run_phase(uvm_phase phase);
       apb_transaction apb_trans;
       wait(apb_vif.mon_cb.prst_n);
+      `uvm_info(get_type_name(),"Start capture APB transaction",UVM_HIGH)
 
       forever begin
 	 @(apb_vif.mon_cb);
-	 `uvm_info(get_type_name(),"Start capture APB transaction",UVM_LOW)
 
 	 if((apb_vif.mon_cb.psel && apb_vif.mon_cb.penable && apb_vif.mon_cb.pready)) begin
 	    apb_trans = apb_transaction::type_id::create("apb_trans");
@@ -40,7 +40,7 @@ class apb_monitor extends uvm_monitor;
 	       apb_trans.xact_type = apb_transaction::READ;
                apb_trans.data      = apb_vif.mon_cb.prdata;
 	    end
-	    `uvm_info(get_type_name(),$sformatf("Observed transaction: \n%s",apb_trans.sprint()),UVM_LOW)
+	    `uvm_info(get_type_name(),$sformatf("Observed transaction: \n%s",apb_trans.sprint()),UVM_HIGH)
 
 	    item_observed_port.write(apb_trans);
 	 end

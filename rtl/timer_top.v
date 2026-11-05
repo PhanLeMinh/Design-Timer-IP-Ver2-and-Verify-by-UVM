@@ -56,6 +56,7 @@ wire [31:0] tdr0_pwm_cnt;
 			  .pstrb      (tim_pstrb  ),
 			  .cnt        (count      ),
 			  .debug_mode (dbg_mode   ),
+			  .cnt_en     (count_en   ),
 			  .tim_int    (tim_int    ),
 			  .pwm_int    (pwm_int    ),
 			  .div_en     (div_en     ),

@@ -1,6 +1,8 @@
 class timer_reg_block extends uvm_reg_block;
    `uvm_object_utils(timer_reg_block)
 
+   uvm_reg_map apb_map;
+
    rand timer_TCR_reg   TCR;
    rand timer_TDR0_reg  TDR0;
    rand timer_TDR1_reg  TDR1;
@@ -16,35 +18,35 @@ class timer_reg_block extends uvm_reg_block;
    endfunction
 
    virtual function void build();
-      TCR = timer_tcr_reg::type_id::create("TCR");
+      TCR = timer_TCR_reg::type_id::create("TCR");
       TCR.configure(this);
       TCR.build();
 
-      TDR0 = timer_tdr0_reg::type_id::create("TDR0");
+      TDR0 = timer_TDR0_reg::type_id::create("TDR0");
       TDR0.configure(this);
       TDR0.build();
 
-      TDR1 = timer_tdr1_reg::type_id::create("TDR1");
+      TDR1 = timer_TDR1_reg::type_id::create("TDR1");
       TDR1.configure(this);
       TDR1.build();
 
-      TCMP0 = timer_tcmp0_reg::type_id::create("TCMP0");
+      TCMP0 = timer_TCMP0_reg::type_id::create("TCMP0");
       TCMP0.configure(this);
       TCMP0.build();
 
-      TCMP1 = timer_tcmp1_reg::type_id::create("TCMP1");
+      TCMP1 = timer_TCMP1_reg::type_id::create("TCMP1");
       TCMP1.configure(this);
       TCMP1.build();
 
-      TIER = timer_tier_reg::type_id::create("TIER");
+      TIER = timer_TIER_reg::type_id::create("TIER");
       TIER.configure(this);
       TIER.build();
 
-      TISR = timer_tisr_reg::type_id::create("TISR");
+      TISR = timer_TISR_reg::type_id::create("TISR");
       TISR.configure(this);
       TISR.build();
 
-      THCSR = timer_thcsr_reg::type_id::create("THCSR");
+      THCSR = timer_THCSR_reg::type_id::create("THCSR");
       THCSR.configure(this);
       THCSR.build();
 

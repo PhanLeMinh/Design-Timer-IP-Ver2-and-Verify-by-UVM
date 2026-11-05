@@ -8,12 +8,16 @@ class apb_transaction extends uvm_sequence_item;
    rand bit [`APB_DATA_WIDTH-1:0] data;
    rand bit                       pslverr;
    rand xact_type_enum            xact_type;
+   rand bit [3:0]                 pstrb;
+
+   constraint pstrb_c{soft pstrb==4'hF;}
 
    `uvm_object_utils_begin(apb_transaction)
       `uvm_field_enum      (xact_type_enum  ,xact_type, UVM_ALL_ON | UVM_HEX)
       `uvm_field_int       (addr                     , UVM_ALL_ON | UVM_HEX)
       `uvm_field_int       (data                     , UVM_ALL_ON | UVM_HEX)
       `uvm_field_int       (pslverr                  , UVM_ALL_ON | UVM_HEX)
+      `uvm_field_int       (pstrb                    , UVM_ALL_ON | UVM_HEX)
    `uvm_object_utils_end
 
    function new(string name = "apb_transaction");

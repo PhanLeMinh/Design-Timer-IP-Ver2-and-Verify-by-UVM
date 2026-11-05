@@ -1,4 +1,4 @@
-package apb_register_pkg;
+package timer_register_pkg;
    import uvm_pkg::*;
    `include "uvm_macros.svh"
 

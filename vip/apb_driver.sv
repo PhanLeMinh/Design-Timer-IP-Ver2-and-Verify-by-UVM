@@ -16,7 +16,7 @@ class apb_driver extends uvm_driver #(apb_transaction);
 	virtual task run_phase(uvm_phase phase);
 	   forever begin
 	      seq_item_port.get_next_item(req);
-	      `uvm_info(get_type_name(), $sformatf("Driver received transaction: addr=0x%0h data=0x%0h kind=%0s",req.addr,req.data,(req.xact_type == apb_transaction::WRITE) ? "WRITE" : "READ"),UVM_LOW)
+	      `uvm_info(get_type_name(), $sformatf("Driver received transaction: addr=0x%0h data=0x%0h kind=%0s",req.addr,req.data,(req.xact_type == apb_transaction::WRITE) ? "WRITE" : "READ"),UVM_HIGH)
 	      $cast(rsp,req.clone());
 	      rsp.set_id_info(req);
 
@@ -42,21 +42,18 @@ class apb_driver extends uvm_driver #(apb_transaction);
 	      apb_vif.drv_cb.pwrite  <= 1;
 	      apb_vif.drv_cb.paddr   <= req.addr;
 	      apb_vif.drv_cb.pwdata  <= req.data;
-	      apb_vif.drv_cb.pstrb  <= 4'hF;
+	      apb_vif.drv_cb.pstrb   <= req.pstrb;
 	      // Access phase
 	      @(apb_vif.drv_cb);
 	      apb_vif.drv_cb.penable <= 1;
 	      // Wait pready = 1
 	      wait(apb_vif.drv_cb.pready == 1'b1);
 	      rsp.pslverr = apb_vif.drv_cb.pslverr;
-	      `uvm_info(get_type_name(),$sformatf("WRITE complete: addr=0x%0h data=0x%0h ",req.addr,req.data),UVM_LOW)
+	      `uvm_info(get_type_name(),$sformatf("WRITE complete: addr=0x%0h data=0x%0h ",req.addr,req.data),UVM_HIGH)
 	      // IDLE phae
-	      @(apb_vif.drv_cb);
 	      apb_vif.drv_cb.psel    <= 0;
 	      apb_vif.drv_cb.pwrite  <= 0;
 	      apb_vif.drv_cb.penable <= 0;
-	      apb_vif.drv_cb.pwdata  <= 0;
-	      apb_vif.drv_cb.paddr   <= 0;
 	   end
 	   if(req.xact_type == apb_transaction::READ) begin
 	      // Set up phase
@@ -71,9 +68,8 @@ class apb_driver extends uvm_driver #(apb_transaction);
 	      wait(apb_vif.drv_cb.pready == 1'b1);
 	      rsp.data    = apb_vif.drv_cb.prdata;
 	      rsp.pslverr = apb_vif.drv_cb.pslverr;
-	      `uvm_info(get_type_name(),$sformatf("READ complete: addr=0x%0h data=0x%0h rec_data=0x%0h",req.addr,req.data,rsp.data),UVM_LOW)
+	      `uvm_info(get_type_name(),$sformatf("READ complete: addr=0x%0h data=0x%0h rec_data=0x%0h",req.addr,req.data,rsp.data),UVM_HIGH)
 	      // Idle phase
-	      @(apb_vif.drv_cb);
 	      apb_vif.drv_cb.psel    <= 0;
 	      apb_vif.drv_cb.penable <= 0; 
 	   end

@@ -5,6 +5,7 @@ class pwm_cnt_seq extends uvm_sequence;
 
    rand bit [31:0] tcmp0_val; // period
    rand bit [31:0] tcmp1_val; // duty
+   rand bit [31:0] tdr0_val; // pwm cnt
    rand bit div_mode;
    rand bit div_en;
    rand bit pwm_en;
@@ -17,6 +18,7 @@ class pwm_cnt_seq extends uvm_sequence;
       soft prescaler == 0;
       soft int_en == 1;
       soft div_en == 1;
+      soft pwm_en == 1;
    }
 
    constraint tcmp_val{
@@ -68,6 +70,7 @@ class pwm_cnt_seq extends uvm_sequence;
       join_any
       disable fork;
 
+      regmodel.TDR0.read(status,tdr0_val);
       regmodel.TISR.write(status,32'h0000_0002);
       regmodel.TISR.read(status,rdata);
       if(rdata[1] == 1'b0) begin

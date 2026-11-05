@@ -13,10 +13,17 @@ class timer_reg2apb_adapter extends uvm_reg_adapter;
    //---------------------------------------------------------------------------
    virtual function uvm_sequence_item reg2bus(const ref uvm_reg_bus_op rw);
       apb_transaction apb = apb_transaction::type_id::create("apb");
+      uvm_reg_item      item = get_item(); // Lấy item chứa extension từ RAL
+      apb_reg_extension ext;
       apb.xact_type = (rw.kind == UVM_WRITE) ? apb_transaction::WRITE : apb_transaction::READ;
       apb.addr      = rw.addr;
       apb.data      = rw.data;
-      `uvm_info(get_type_name(),$formatf("reg2bus: address=0x%0h data=0x%0h kind=%0s",apb_address, apb.data, apb.xact_type.name()),UVM_HIGH)
+      if (item != null && item.extension != null && $cast(ext, item.extension)) begin
+         apb.pstrb = ext.pstrb;
+      end else begin
+         apb.pstrb = (rw.byte_en == 0) ? 4'hF : rw.byte_en;
+      end
+      `uvm_info(get_type_name(),$sformatf("reg2bus: address=0x%0h data=0x%0h kind=%0s",apb.addr, apb.data, apb.xact_type.name()),UVM_HIGH)
       return apb;
    endfunction
    
@@ -32,6 +39,7 @@ class timer_reg2apb_adapter extends uvm_reg_adapter;
       rw.addr = apb.addr;
       rw.data = apb.data;
       rw.status = apb.pslverr ? UVM_NOT_OK : UVM_IS_OK;
-      `uvm_info(get_type_name(), $formatf("bus2reg: address=0x%0h data=0x%0h kind=%0s statu=%0s",rw.addr,rw.data,rw.kind.name(),rw.status.name()),UVM_HIGH)
+      rw.byte_en = apb.pstrb;
+      `uvm_info(get_type_name(), $sformatf("bus2reg: address=0x%0h data=0x%0h kind=%0s statu=%0s",rw.addr,rw.data,rw.kind.name(),rw.status.name()),UVM_HIGH)
    endfunction
 endclass
