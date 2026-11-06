@@ -10,7 +10,7 @@ class pwm_cnt_div0_test extends apb_base_test;
    virtual function void build_phase(uvm_phase phase);
       super.build_phase(phase);
       pwm_seq = pwm_cnt_seq::type_id::create("pwm_cnt_seq");
-      if(!pwm_seq.randomize() with {div_val==4'd0;})
+      if(!pwm_seq.randomize() with {div_en == 1'b0;})
          `uvm_fatal(get_type_name(),"Failure randomize pwm_seq")
    endfunction
 

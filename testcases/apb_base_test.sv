@@ -47,7 +47,22 @@ class apb_base_test extends uvm_test;
    endfunction
 
    virtual function void final_phase(uvm_phase phase);
-      super.final_phase(phase);
+      uvm_report_server srv;
+        super.final_phase(phase);
+        `uvm_info("final_phase","Entered...",UVM_HIGH)
+        srv = uvm_report_server::get_server();
+        if(srv.get_severity_count(UVM_FATAL) + srv.get_severity_count(UVM_ERROR) > 0) begin
+            $display("\n\033[31m===========================================================");
+            $display("             ##### Status: TEST FAILED #####         ");
+            $display("===========================================================\033[0m\n");
+        end
+        else begin
+            $display("\n\033[32m==========================================================");
+            $display("              ##### Status: TEST PASSED #####          ");
+            $display("===========================================================\033[0m\n");
+        end
+
+        `uvm_info("final_phase","Exiting...",UVM_HIGH)
    endfunction
 
 endclass

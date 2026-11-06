@@ -84,7 +84,6 @@ wire [31:0] tdr0_pwm_cnt;
 			  .div_val    (div_val    ),
 			  .halt_req   (halt_req   ),
 			  .timer_en   (timer_en   ),
-			  .debug_mode (dbg_mode   ),
 			  .cnt_en     (count_en   ),
 			  .div_mode   (div_mode   ),
 			  .prescaler  (prescaler  ),

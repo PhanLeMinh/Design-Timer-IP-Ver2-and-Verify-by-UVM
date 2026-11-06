@@ -23,10 +23,12 @@ class timer_coverage extends uvm_subscriber#(apb_transaction);
        }
        cp_pslverr: coverpoint trans.pslverr;
        x_data_kind: cross cp_transfer,cp_address;
-       x_addr_data: cross cp_address,cp_data;
+       x_addr_data: cross cp_address,cp_data{
+          ignore_bins unreach = binsof(cp_address) intersect {12'h14,12'h18,12'h1C} && binsof(cp_data.max);
+       }
     endgroup
     
-    covergroup TCR_GROUP with function sample(bit [31:0] data, bit err);
+    covergroup TCR_GROUP with function sample(bit [31:0] data, bit err,bit [3:0] pstrb);
        cp_timer_en: coverpoint data[0];
        cp_div_en  : coverpoint data[1];
        cp_div_mode: coverpoint data[2];
@@ -35,7 +37,7 @@ class timer_coverage extends uvm_subscriber#(apb_transaction);
           bins legal[] = {[4'd0:4'd8]};
           bins illegal = {[4'd9:4'd15]};
        }
-       cp_prescaler: coverpoint data[31:16] {
+       cp_prescaler: coverpoint data[31:16] iff(pstrb[1]) {
           bins p0   = {0};
           bins p1   = {1};
           bins low = {[2:15]};
@@ -51,7 +53,9 @@ class timer_coverage extends uvm_subscriber#(apb_transaction);
     
        x_mode: cross cp_div_en, cp_div_mode, cp_pwm_en;
        x_divval_en: cross cp_div_val, cp_div_en;
-       x_pre_mode : cross cp_prescaler, cp_div_mode;
+       x_pre_mode : cross cp_prescaler, cp_div_mode {
+          ignore_bins not_used = binsof(cp_div_mode) intersect {0} && binsof(cp_prescaler);
+       }
        x_illegal_err: cross cp_err, cp_div_val {
           // div_val > 8, error = 1
           illegal_bins bad = binsof(cp_div_val.illegal) && binsof(cp_err) intersect {0};
@@ -65,7 +69,7 @@ class timer_coverage extends uvm_subscriber#(apb_transaction);
           bins low  = {[2:15]};
           bins mid  = {[16:300]};
           bins big  = {[301:32'hFFFF_FFFE]};
-          bins max  = {32'hFFFF};
+          bins max  = {32'hFFFF_FFFF};
        }
        cp_byte0: coverpoint data[7:0] {
           bins zero = {0};
@@ -119,11 +123,11 @@ class timer_coverage extends uvm_subscriber#(apb_transaction);
     virtual function void write(apb_transaction t);
        bit is_rw = (t.xact_type == apb_transaction::WRITE);
        case(t.addr)
-          12'h00: if(is_rw) TCR_GROUP.sample(t.data,t.pslverr);
+          12'h00: if(is_rw) TCR_GROUP.sample(t.data,t.pslverr,t.pstrb);
 	  12'h0C,12'h10: if(is_rw) TCMP_GROUP.sample(t.data);
 	  12'h14: if(is_rw) TIER_GROUP.sample(t.data);
-	  12'h18: if(is_rw) TISR_GROUP.sample(t.data,is_rw);
-	  12'h1C: if(is_rw) THCSR_GROUP.sample(t.data,is_rw);
+	  12'h18: TISR_GROUP.sample(t.data,is_rw);
+	  12'h1C: THCSR_GROUP.sample(t.data,is_rw);
        endcase
        APB_GROUP.sample(t);
     endfunction

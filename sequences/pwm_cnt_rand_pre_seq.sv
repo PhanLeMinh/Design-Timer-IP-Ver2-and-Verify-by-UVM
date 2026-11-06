@@ -80,6 +80,10 @@ class pwm_cnt_rand_pre_seq extends uvm_sequence;
       join_any
       disable fork;
 
+      begin
+           bit [31:0] tcr_stop = {prescaler, 4'b0, div_val, 4'b0, div_mode, pwm_en, div_en, 1'b0}; // timer_en = 0 
+           regmodel.TCR.write(status, tcr_stop);
+      end
       regmodel.TDR0.read(status,tdr0_val);
       regmodel.TISR.write(status,32'h0000_0002);
       regmodel.TISR.read(status,rdata);
@@ -88,6 +92,8 @@ class pwm_cnt_rand_pre_seq extends uvm_sequence;
       end else begin
          `uvm_error(msg,"PWM interrupt is NOT deleted!!!")
       end
+      regmodel.TCR.write(status,32'h0);
+      #20ns;
 
    endtask
 endclass

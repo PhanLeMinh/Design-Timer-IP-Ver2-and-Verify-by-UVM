@@ -21,12 +21,13 @@ package test_pkg;
    `include "timer_cnt_div64_test.sv"
    `include "timer_cnt_div128_test.sv"
    `include "timer_cnt_div256_test.sv"
-   `include "timer_cnt_div_rand_test.sv"
 
    `include "timer_cnt_pre1_test.sv"
    `include "timer_cnt_pre2_test.sv"
    `include "timer_cnt_pre_ffff_test.sv"
    `include "timer_cnt_rand_pre_test.sv"
+   
+   `include "timer_disable_test.sv"
 
    `include "pwm_cnt_div0_test.sv"
    `include "pwm_cnt_div2_test.sv"
@@ -43,16 +44,19 @@ package test_pkg;
    `include "pwm_cnt_pre_ffff_test.sv"
    `include "pwm_cnt_rand_pre_test.sv"
 
+   `include "pwm_disable_test.sv"
+
    `include "timer_halt_test.sv"
    `include "pwm_halt_test.sv"
 
-   `include "illegal_div_val_test.sv"
+   `include "timer_illegal_div_val_test.sv"
    `include "on_the_fly_write_test.sv"
    `include "timer_cnt_load_test.sv"
-   `include "tdr_pstrb_test.sv"
-   `include "timer_disable_test.sv"
+   `include "timer_tdr_pstrb_test.sv"
+   `include "timer_tcmp_pstrb_test.sv"
    `include "unmapped_addr_test.sv"
-   `include "int_mask_test.sv"
-   `include "tcmp_max_test.sv"
+   `include "timer_int_mask_test.sv"
+   `include "timer_tcmp_max_test.sv"
+   `include "timer_tcr_pstrb_test.sv"
 
 endpackage

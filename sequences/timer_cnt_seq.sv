@@ -84,6 +84,9 @@ class timer_cnt_seq extends uvm_sequence;
       else begin
          `uvm_error(get_type_name(),"Interrupt flag is NOT deleted")
       end
+      regmodel.TCR.write(status,tcr_val & ~32'h1);
+      regmodel.TCR.write(status,32'h0);
+      #20ns;
 
    endtask
 endclass

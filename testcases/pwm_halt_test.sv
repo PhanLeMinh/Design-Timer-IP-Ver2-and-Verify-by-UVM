@@ -19,9 +19,11 @@ class pwm_halt_test extends apb_base_test;
       phase.raise_objection(this);
 
       regmodel = timer_env.reg_model;
-      regmodel.TCR.write(status,32'h0000_0005); // timer_en = 1, pwm_en = 1;
+      regmodel.TCR.write(status,32'h0000_0009); // timer_en = 1, pwm_en = 1;
       #50ns;
       regmodel.TDR0.read(status,rdata1);
+
+      timer_vif.dbg_mode = 1'b1;
       regmodel.THCSR.write(status,32'h0000_0001); // halt_req = 1;
       #20ns;
       regmodel.TDR0.read(status,rdata2);
@@ -32,6 +34,9 @@ class pwm_halt_test extends apb_base_test;
          `uvm_info(get_type_name(),"TEST PASSED",UVM_LOW)
       end
       #20ns;
+      regmodel.THCSR.write(status,32'h0);
+      regmodel.TCR.write(status,32'h0000_0008);
+      regmodel.TCR.write(status,32'h0);
 
       phase.drop_objection(this);
    endtask

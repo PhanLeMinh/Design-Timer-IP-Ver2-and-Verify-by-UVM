@@ -9,5 +9,5 @@ package seq_pkg;
    `include "pwm_cnt_seq.sv"
    `include "pwm_cnt_rand_pre_seq.sv"
    `include "timer_halt_seq.sv"
-   `include "apb_raw_sequence.sv"
+   `include "timer_unmapped_addr_seq.sv"
 endpackage

@@ -66,6 +66,7 @@ class timer_halt_seq  extends uvm_sequence;
          `uvm_error(msg,"TEST FAILED: Halt ack change not 1 -> 0");
       end
       regmodel.THCSR.write(status,32'h0);
-      #50ns;
+      regmodel.TCR.write(status,tcr_val);
+      #20ns;
    endtask
 endclass

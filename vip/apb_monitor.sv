@@ -29,6 +29,7 @@ class apb_monitor extends uvm_monitor;
 	 if((apb_vif.mon_cb.psel && apb_vif.mon_cb.penable && apb_vif.mon_cb.pready)) begin
 	    apb_trans = apb_transaction::type_id::create("apb_trans");
 	    apb_trans.addr      = apb_vif.mon_cb.paddr;
+	    apb_trans.pstrb     = apb_vif.mon_cb.pstrb;
 	    apb_trans.pslverr   = apb_vif.mon_cb.pslverr;
 
 	    if(apb_vif.mon_cb.pwrite) begin

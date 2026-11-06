@@ -29,7 +29,7 @@ class on_the_fly_write_test extends apb_base_test;
       if(status != UVM_NOT_OK)
          `uvm_error(get_type_name(),"On the fly div_en change NOT trigger pslverr")
       #20ns;
-      regmodel.TCR.write(status,32'h0000_0201); // pwm_en 0 -> 1
+      regmodel.TCR.write(status,32'h0000_0109); // pwm_en 0 -> 1
       if(status != UVM_NOT_OK)
          `uvm_error(get_type_name(),"On the fly pwm_en change NOT trigger pslverr")
       #20ns;

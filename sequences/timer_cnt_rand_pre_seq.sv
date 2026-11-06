@@ -81,6 +81,9 @@ class timer_cnt_rand_pre_seq extends uvm_sequence;
       end else begin
          `uvm_error(msg,"Timer interrupt is NOT deleted!!!")
       end
+      regmodel.TCR.write(status,tcr_val & ~32'h1);
+      regmodel.TCR.write(status,32'h0);
+      #20ns;
 
    endtask
 endclass

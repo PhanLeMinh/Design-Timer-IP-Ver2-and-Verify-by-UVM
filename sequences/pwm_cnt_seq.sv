@@ -14,11 +14,15 @@ class pwm_cnt_seq extends uvm_sequence;
    rand bit int_en;
 
    constraint soft_c{
-      soft div_mode == 1;
+      soft div_mode == 0;
       soft prescaler == 0;
       soft int_en == 1;
       soft div_en == 1;
       soft pwm_en == 1;
+   }
+
+   constraint div_val_c{
+      div_val inside {[4'd1:4'd8]};
    }
 
    constraint tcmp_val{
@@ -51,7 +55,7 @@ class pwm_cnt_seq extends uvm_sequence;
       regmodel.TCMP1.write(status,tcmp1_val);
       regmodel.TIER.write(status,{31'h0,int_en});
 
-      tcr_val = {prescaler,4'b0,div_val,4'b0,div_mode,pwm_en,div_en,1'b1};
+      tcr_val = {prescaler,4'b0,div_val,4'b0,pwm_en,div_mode,div_en,1'b1};
       regmodel.TCR.write(status,tcr_val);
 
       fork
@@ -70,6 +74,10 @@ class pwm_cnt_seq extends uvm_sequence;
       join_any
       disable fork;
 
+      begin
+           bit [31:0] tcr_stop = {prescaler, 4'b0, div_val, 4'b0, div_mode, pwm_en, div_en, 1'b0}; // timer_en = 0 
+           regmodel.TCR.write(status, tcr_stop);
+      end
       regmodel.TDR0.read(status,tdr0_val);
       regmodel.TISR.write(status,32'h0000_0002);
       regmodel.TISR.read(status,rdata);
@@ -79,5 +87,7 @@ class pwm_cnt_seq extends uvm_sequence;
       else begin
          `uvm_error(get_type_name(),"PWM Interrupt flag is NOT deleted !");
       end
+      regmodel.TCR.write(status,32'h0);
+      #20ns;
    endtask
 endclass

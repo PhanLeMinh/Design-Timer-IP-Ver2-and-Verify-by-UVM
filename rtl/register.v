@@ -50,14 +50,14 @@ parameter THCSR_DEFAULT = 32'h0000_0000;
 
 // kHAI BAO
 // TCR
-reg  [31:0] tcr_r;
+// reg  [31:0] tcr_r;
 wire timer_en_tmp;
 wire div_en_tmp;
 wire [3:0] div_val_tmp;
 wire div_val_timer_en_err;
 wire div_en_timer_en_err;
 wire div_val_err;
-wire [31:0] tcr_tmp;
+// wire [31:0] tcr_tmp;
 reg timer_en_1d;
 
 wire [15:0] prescaler_tmp;
@@ -75,23 +75,20 @@ reg  [31:0] tcmp1_r;
 wire [31:0] tcmp1_tmp;
 
 // TIER
-reg  [31:0] tier_r;
+reg  int_en_r;
 wire int_en;
-wire [31:0] tier_tmp;
 
 // TISR
-reg  [31:0] tisr_r;
-wire int_st;
-wire [31:0] tisr_tmp;
+reg  int_st_r;
+reg  pwm_int_st_r;
 wire int_clr;
 wire int_set;
-wire pwm_int_st; 
+wire pwm_clr;
 
 // THCSR
-reg  [31:0] thcsr_r;
 wire halt_ack;
+wire halt_req;
 reg  halt_req_r;
-wire [31:0] thcsr_tmp;
 
 reg  [31:0] rdata_r;
 reg  [7 :0] reg_sel;
@@ -215,15 +212,14 @@ assign tcmp1_duty = tcmp1_r;
 // TIER
 // reg_sel[5]
 // Bit[0] int_en 
-assign int_en = (pstrb[0] & wr_en & reg_sel[5]) ? wdata[0] : tier_r[0];  
-assign tier_tmp = {31'h0, int_en};
+assign int_en = (pstrb[0] & wr_en & reg_sel[5]) ? wdata[0] : int_en_r;  
 always @(posedge clk or negedge rst_n)
 begin
 	if(!rst_n) begin
-		tier_r <= TIER_DEFAULT;
+		int_en_r <= 1'b0;
 	end
 	else begin
-		tier_r <= tier_tmp;
+		int_en_r <= int_en;
 	end
 end
 
@@ -234,35 +230,34 @@ end
 assign int_set = (cnt == compare_val) & cnt_en;
 assign int_clr = pstrb[0] & wr_en & wdata[0] & reg_sel[6];
 assign pwm_clr = pstrb[0] & wr_en & wdata[1] & reg_sel[6]; 
-assign int_st  = tisr_r[0]; 
-assign pwm_int_st = tisr_r[1];
 
 
 always @(posedge clk or negedge rst_n)
 begin
 	if(!rst_n) begin
-		tisr_r <= TISR_DEFAULT;
+		int_st_r     <= 1'b0;
+		pwm_int_st_r <= 1'b0;
 	end
 	else begin 
 	     if(pwm_en) begin
 		if(pwm_clr) begin
-			tisr_r[1] <= 1'b0;
+			pwm_int_st_r <= 1'b0;
 		end
 		else if(pwm_period_match) begin
-			tisr_r[1] <= 1'b1;
+			pwm_int_st_r <= 1'b1;
 		end
 		else begin
-			tisr_r[1] <= tisr_r[1];
+			pwm_int_st_r <= pwm_int_st_r;
 		end
 	     end 
 	     else begin	
 		if(int_clr) begin
-                	tisr_r[0] <= 1'b0;
+                	int_st_r <= 1'b0;
         	end else if(int_set) begin
-                	tisr_r[0] <= 1'b1;
+                	int_st_r <= 1'b1;
         	end
         	else begin
-                	tisr_r[0] <= tisr_r[0];
+                	int_st_r <= int_st_r;
 		end
 	     end
         end
@@ -271,9 +266,9 @@ end
 // Interrupt
 // int_st xay ra khi cnt 64 bit == tcmp 64 bit 
 // int_en = 1 moi xuat ra output
-assign tim_int = int_st & int_en;
+assign tim_int = int_st_r & int_en_r;
 // pwm_st xay ra khi pwm_cnt == tcmp0_period & int_en = 1
-assign pwm_int = pwm_int_st & int_en;
+assign pwm_int = pwm_int_st_r & int_en_r;
 
 // THCSR
 // halt_ack bit 1 RO
@@ -282,7 +277,6 @@ assign pwm_int = pwm_int_st & int_en;
 assign halt_req = (pstrb[0] & wr_en & reg_sel[7]) ? wdata[0]: halt_req_r;
 assign halt_ack = halt_req_r & debug_mode;
 assign halt_req_out =  halt_ack;
-assign thcsr_tmp = {30'h0, halt_ack, halt_req_r};
 always @(posedge clk or negedge rst_n)
 begin
 	if(!rst_n) begin
@@ -304,9 +298,9 @@ begin
                		 ADDR_TDR1 :    rdata_r = cnt[63:32];
                		 ADDR_TCMP0:    rdata_r = tcmp0_r;
                		 ADDR_TCMP1:    rdata_r = tcmp1_r;
-               		 ADDR_TIER :    rdata_r = tier_r;
-               		 ADDR_TISR :    rdata_r = tisr_r;
-               		 ADDR_THCSR:    rdata_r = thcsr_tmp;
+               		 ADDR_TIER :    rdata_r = {31'h0,int_en_r};
+               		 ADDR_TISR :    rdata_r = {30'h0,pwm_int_st_r,int_st_r};
+               		 ADDR_THCSR:    rdata_r = {30'h0,halt_ack,halt_req_r};
                		 default:  rdata_r = 32'h0;
         	endcase
 	end

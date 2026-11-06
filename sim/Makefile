@@ -1,72 +1,64 @@
-##################################################################################################
-#This file created by Huy Nguyen
-#Updated date: 6/30/2019
-#Example run string: make TESTNAME={name_of_testcase} {optional}
-#		     make TESTNAME=counter_test all 
-##################################################################################################
-#Define variables
-TESTNAME 	?= test
-TB_NAME 	?= test_bench
-RADIX		?= decimal
-MEALY_FSM   ?= 0
+## -------------------------------------------------------------
+# This file created by Huy Nguyen
+# Updated date: 01/09/2024
+# Example run string: make TESTNAME={name_of_testcase} {optional}
+#		     make run TESTNAME=ahb_base_test 
+## -------------------------------------------------------------
+TESTNAME  ?= apb_base_test
+TB_NAME   ?= test_bench
+VERBOSITY ?= UVM_MEDIUM
+SEED      ?= 1
+RUNARG    ?=
+COV       ?=ON
+##--------------------------------------------------------------
+ifeq ($(COV),ON)
+  CMP_COV_OPT   = -coveropt 3 +cover=bcestf
+  SIM1_COV_OPT  = -coverage -coveranalysis
+  SIM2_COV_OPT  = coverage save -codeAll -cvg -onexit $(TESTNAME).ucdb;
+endif
 
-#==============================
-all: build run
-
-all_wave: build run wave
-
-all_cov: build_cov run_cov
-
-group:
-	make all_cov TESTNAME=apb_pslverr_chk
-	make all_cov TESTNAME=cnt_counting_chk
-	make all_cov TESTNAME=cnt_crtl_chk
-	make all_cov TESTNAME=cnt_halt_chk
-	make all_cov TESTNAME=interrupt_chk
-	make all_cov TESTNAME=reg_byte_access
-	make all_cov TESTNAME=reg_init_chk
-	make all_cov TESTNAME=reg_reserved_chk
-	make all_cov TESTNAME=reg_wr_chk
+VSIM = vsim -c -sv_seed $(SEED) \
+       -l $(TESTNAME)_$(SEED).log \
+       -voptargs=+acc -debugDB -assertdebug \
+       $(SIM1_COV_OPT) $(TB_NAME) \
+       -do "log -r /*; $(SIM2_COV_OPT) run -all; quit"
+run:
+	mkdir -p log
+	$(VSIM) +UVM_TESTNAME=$(TESTNAME) \
+	        +UVM_VERBOSITY=$(VERBOSITY) \
+	        $(RUNARG)
+	mv $(TESTNAME)_$(SEED).log ./log/
+	cp -f vsim.wlf log/$(TESTNAME)_$(SEED).wlf
+	ln -sf ./log/$(TESTNAME)_$(SEED).log run.log
 
 build:
 	mkdir -p log
 	vlib work
 	vmap work work
-	vlog  -f compile.f | tee compile.log
-build_cov:
-	mkdir -p log
-	cp -rf ../testcase/$(TESTNAME).v run_test.v
-	vlib work
-	vmap work work
-	vlog +cover=bcesft -f compile.f
-run:
-	vsim -debugDB -l $(TESTNAME).log -voptargs=+acc -assertdebug -c $(TB_NAME) -do "log -r /*;run -all;" -GMEALY_FSM=$(MEALY_FSM)
-run_cov:
-	vsim -coverage -l $(TESTNAME).log -c $(TB_NAME) -voptargs="+cover=bcesft" -assertdebug -do "coverage save -onexit $(TESTNAME).ucdb; log -r /*;run -all"
+	vlog ${CMP_COV_OPT} -timescale "1ns/1ps" -f compile.f | tee compile.log
+cov_gui:
+	vsim -i -viewcov ${TESTNAME}.ucdb &
+cov_merge:
+	rm -f      IP_MERGE.ucdb
+	vcover merge IP_MERGE.ucdb *.ucdb
+
 wave:
-	vsim -i -view vsim.wlf -do "add wave vsim:/$(TB_NAME)/*; radix -$(RADIX)" &
-
-view_cov:
-	vsim -gui -viewcov IP.ucdb &
-
-gen_cov:
-	mkdir -p coverage
-	vcover merge IP.ucdb *.ucdb
-	vcover report IP.ucdb -output coverage/summary_report.txt
-	vcover report -zeros -details -code bcesft -annotate -All -codeAll IP.ucdb -output coverage/detail_report.txt
-gen_html:
-	mkdir -p coverage
-	vcover merge IP.ucdb *.ucdb
-	vcover report -zeros -details -code bcesft -annotate -testhitdataAll -html IP.ucdb 
-clean:
+	vsim -i -view vsim.wlf -do "add wave vsim:/$(TB_NAME)/*;" &
+clean: 
 	rm -rf work
-	rm -rf vsim.dbg
+	rm -rf log
 	rm -rf *.ini
 	rm -rf *.log
+	rm -rf *.log#
+	rm -rf *.trace
 	rm -rf *.wlf
 	rm -rf transcript
 	rm -rf *.ucdb
-help:
+	rm -rf vsim.dbg
+	rm -rf tmp_report
+	rm -rf *.txt
+
+help: 
 	@echo ""
 	@echo "****************************************"
 	@echo "** make clean    : clean all compiled data"
