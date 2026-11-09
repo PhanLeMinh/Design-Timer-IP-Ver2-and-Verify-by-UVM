@@ -58,5 +58,6 @@ package test_pkg;
    `include "timer_int_mask_test.sv"
    `include "timer_tcmp_max_test.sv"
    `include "timer_tcr_pstrb_test.sv"
+   `include "reg_pstrb_cov_test.sv"
 
 endpackage

@@ -33,11 +33,11 @@ class timer_coverage extends uvm_subscriber#(apb_transaction);
        cp_div_en  : coverpoint data[1];
        cp_div_mode: coverpoint data[2];
        cp_pwm_en  : coverpoint data[3];
-       cp_div_val : coverpoint data[11:8] {
+       cp_div_val : coverpoint data[11:8] iff(pstrb[1]){
           bins legal[] = {[4'd0:4'd8]};
           bins illegal = {[4'd9:4'd15]};
        }
-       cp_prescaler: coverpoint data[31:16] iff(pstrb[1]) {
+       cp_prescaler: coverpoint data[31:16] {
           bins p0   = {0};
           bins p1   = {1};
           bins low = {[2:15]};
