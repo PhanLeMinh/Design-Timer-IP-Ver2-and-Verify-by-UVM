@@ -1,5 +1,5 @@
 QuestaSim-64 vlog 2024.2 Compiler 2024.05 May 20 2024
-Start time: 19:24:26 on Nov 06,2026
+Start time: 19:57:41 on Nov 06,2026
 vlog -coveropt 3 "+cover=bcestf" -timescale 1ns/1ps -f compile.f 
 -- Compiling module register
 -- Compiling module counter_control
@@ -27,5 +27,5 @@ vlog -coveropt 3 "+cover=bcestf" -timescale 1ns/1ps -f compile.f
 
 Top level modules:
 	test_bench
-End time: 19:24:27 on Nov 06,2026, Elapsed time: 0:00:01
+End time: 19:57:41 on Nov 06,2026, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0

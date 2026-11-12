@@ -1,0 +1,123 @@
+# vsim -c -sv_seed 684916 -l pwm_cnt_div64_test_684916.log -voptargs="+acc" -debugDB -assertdebug -coverage -coveranalysis test_bench -do "log -r /*; coverage save -codeAll -cvg -onexit pwm_cnt_div64_test.ucdb; run -all; quit" "+UVM_TESTNAME=pwm_cnt_div64_test" "+UVM_VERBOSITY=UVM_MEDIUM" 
+# Start time: 19:59:24 on Nov 06,2026
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# //  Questa Sim-64
+# //  Version 2024.2 linux_x86_64 May 20 2024
+# //
+# // Unpublished work. Copyright 2024 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // "SISW"), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# Loading sv_std.std
+# Loading work.apb_if(fast)
+# Loading work.timer_if(fast)
+# Loading mtiUvm.uvm_pkg(fast)
+# Loading work.apb_pkg(fast)
+# Loading work.timer_register_pkg(fast)
+# Loading work.timer_regmodel_pkg(fast)
+# Loading work.seq_pkg(fast)
+# Loading work.env_pkg(fast)
+# Loading work.test_pkg(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading work.test_bench(fast)
+# Loading work.apb_if(fast__2)
+# Loading work.timer_if(fast__2)
+# Loading work.timer_top(fast)
+# Loading work.apb_slave(fast)
+# Loading work.register(fast)
+# Loading work.counter_control(fast)
+# Loading work.counter(fast)
+# Loading work.pwm_counter(fast)
+# Loading /home/minhphan/SIEMENS_EDA/questasim/uvm-1.1d/linux_x86_64/uvm_dpi.so
+# ** Note: (vsim-8716) Reusing existing debug database vsim.dbg.
+# log -r /*
+#  coverage save -codeAll -cvg -onexit pwm_cnt_div64_test.ucdb
+#  run -all
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# UVM_INFO @ 0: reporter [RNTST] Running test pwm_cnt_div64_test...
+# UVM_INFO ./../vip//apb_agent.sv(26) @ 0: uvm_test_top.timer_env.apb_agent [apb_agent] Active agent is configured
+# UVM_INFO @ 0: reporter [UVMTOP] UVM testbench topology:
+# -----------------------------------------------------------------------------
+# Name                        Type                                  Size  Value
+# -----------------------------------------------------------------------------
+# uvm_test_top                pwm_cnt_div64_test                    -     @482 
+#   timer_env                 timer_environment                     -     @493 
+#     apb_agent               apb_agent                             -     @513 
+#       apb_driver            apb_driver                            -     @616 
+#         rsp_port            uvm_analysis_port                     -     @631 
+#         seq_item_port       uvm_seq_item_pull_port                -     @623 
+#       apb_monitor           apb_monitor                           -     @639 
+#         item_observed_port  uvm_analysis_port                     -     @765 
+#       apb_sequencer         apb_sequencer                         -     @646 
+#         rsp_export          uvm_analysis_export                   -     @653 
+#         seq_item_export     uvm_seq_item_pull_imp                 -     @747 
+#         arbitration_queue   array                                 0     -    
+#         lock_queue          array                                 0     -    
+#         num_last_reqs       integral                              32    'd1  
+#         num_last_rsps       integral                              32    'd1  
+#     apb_predictor           uvm_reg_predictor #(apb_transaction)  -     @589 
+#       bus_in                uvm_analysis_imp                      -     @596 
+#       reg_ap                uvm_analysis_port                     -     @604 
+#     coverage                timer_coverage                        -     @527 
+#       analysis_imp          uvm_analysis_imp                      -     @534 
+#     timer_scoreboard        timer_scoreboard                      -     @520 
+#       apb_collect_export    uvm_analysis_imp_apb                  -     @779 
+# -----------------------------------------------------------------------------
+# 
+# UVM_INFO ./../sequences/pwm_cnt_seq.sv(51) @ 0: reporter@@pwm_cnt_seq [pwm_cnt_seq] Set config PWM MODE: TCMP0=a, TCMP1=1, pwm_en=1, div_en=1, div_val=6, div_mode=0, int_en=1
+# UVM_INFO ./../sequences/pwm_cnt_seq.sv(66) @ 3672500: reporter@@pwm_cnt_seq [pwm_cnt_seq] PWM Interrupt flag is asserted
+# UVM_INFO ./../sequences/pwm_cnt_seq.sv(85) @ 3752500: reporter@@pwm_cnt_seq [pwm_cnt_seq] PWM Interrupt flag is deleted to 0
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 3792500: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# 
+# [32m==========================================================
+#               ##### Status: TEST PASSED #####          
+# ===========================================================[0m
+# 
+# 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :    9
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [Questa UVM]     2
+# [RNTST]     1
+# [TEST_DONE]     1
+# [UVMTOP]     1
+# [apb_agent]     1
+# [pwm_cnt_seq]     3
+# ** Note: $finish    : /home/minhphan/SIEMENS_EDA/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
+#    Time: 3792500 ps  Iteration: 59  Instance: /test_bench
+# Saving coverage database on exit...
+# End time: 19:59:26 on Nov 06,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0

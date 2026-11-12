@@ -1,0 +1,39 @@
+mkdir -p log
+vlib work
+vmap work work
+QuestaSim-64 vmap 2024.2 Lib Mapping Utility 2024.05 May 20 2024
+vmap work work 
+Copying /home/minhphan/SIEMENS_EDA/questasim/linux_x86_64/../modelsim.ini to modelsim.ini
+Modifying modelsim.ini
+vlog -coveropt 3 +cover=bcestf -timescale "1ns/1ps" -f compile.f | tee compile.log
+QuestaSim-64 vlog 2024.2 Compiler 2024.05 May 20 2024
+Start time: 19:57:41 on Nov 06,2026
+vlog -coveropt 3 "+cover=bcestf" -timescale 1ns/1ps -f compile.f 
+-- Compiling module register
+-- Compiling module counter_control
+-- Compiling module counter
+-- Compiling module apb_slave
+-- Compiling module pwm_counter
+-- Compiling module timer_top
+-- Compiling interface timer_if
+-- Compiling interface apb_if
+-- Compiling package apb_pkg
+-- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+** Note: (vlog-2286) ./../vip/apb_pkg.sv(4): Using implicit +incdir+/home/minhphan/SIEMENS_EDA/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+-- Compiling package timer_register_pkg
+-- Compiling package timer_regmodel_pkg
+-- Importing package timer_register_pkg
+-- Importing package apb_pkg
+-- Compiling package env_pkg
+-- Importing package timer_regmodel_pkg
+-- Compiling package seq_pkg
+-- Compiling package test_pkg
+-- Importing package env_pkg
+-- Importing package seq_pkg
+-- Compiling module test_bench
+-- Importing package test_pkg
+
+Top level modules:
+	test_bench
+End time: 19:57:41 on Nov 06,2026, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0

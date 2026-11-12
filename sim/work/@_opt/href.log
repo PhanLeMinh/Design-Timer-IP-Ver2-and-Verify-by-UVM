@@ -1,15 +1,14 @@
-BEGIN 3:timer_if:fast__1:work
-    tim_int :  1:test_pkg:fast:work
-    pwm_int :  1:test_pkg:fast:work
-    dbg_mode :  1:test_pkg:fast:work
-END 
 BEGIN 3:timer_if:fast__2:work
+    pwm_out :  1:test_bench:fast:work
     tim_int :  1:test_bench:fast:work
     pwm_int :  1:test_bench:fast:work
     dbg_mode :  1:test_bench:fast:work
-    pwm_out :  1:test_bench:fast:work
 END 
 BEGIN 3:apb_if:fast__2:work
+    pready :  1:test_bench:fast:work
+    prst_n :  1:test_bench:fast:work
+    pwrite :  1:test_bench:fast:work
+    prdata :  1:test_bench:fast:work
     paddr :  1:test_bench:fast:work
     pstrb :  1:test_bench:fast:work
     pclk :  1:test_bench:fast:work
@@ -17,12 +16,13 @@ BEGIN 3:apb_if:fast__2:work
     psel :  1:test_bench:fast:work
     penable :  1:test_bench:fast:work
     pwdata :  1:test_bench:fast:work
-    pready :  1:test_bench:fast:work
-    prst_n :  1:test_bench:fast:work
-    pwrite :  1:test_bench:fast:work
-    prdata :  1:test_bench:fast:work
+END 
+BEGIN 3:timer_if:fast__1:work
+    pwm_int :  1:test_pkg:fast:work
+    dbg_mode :  1:test_pkg:fast:work
+    tim_int :  1:test_pkg:fast:work
 END 
 BEGIN 3:apb_if:fast__1:work
-    prst_n :  1:test_pkg:fast:work
     pclk :  1:test_pkg:fast:work
+    prst_n :  1:test_pkg:fast:work
 END 
