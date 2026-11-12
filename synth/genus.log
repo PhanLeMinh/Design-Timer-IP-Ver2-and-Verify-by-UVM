@@ -1,0 +1,43 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+[03:25:44.361361] Configured Lic search path (22.01-s003): 5280@192.168.32.10
+
+Version: 22.18-s061_1, built Fri Apr 25 07:12:05 PDT 2025
+Options: 
+Date:    Thu Nov 12 03:25:44 2026
+Host:    dtvt-07 (x86_64 w/Linux 4.18.0-553.el8_10.x86_64) (16cores*24cpus*1physical cpu*13th Gen Intel(R) Core(TM) i7-13700 30720KB) (15817920KB)
+PID:     43360
+OS:      Rocky Linux 8.10 (Green Obsidian)
+
+Checking out license: Genus_Synthesis
+[03:25:44.275946] Periodic Lic check successful
+[03:25:44.275954] Feature usage summary:
+[03:25:44.275954] Genus_Synthesis
+
+
+
+***********************************************************************************************************
+***********************************************************************************************************
+
+
+
+Finished executable startup (0 seconds elapsed).
+
+Loading tool scripts...
+Finished loading tool scripts (6 seconds elapsed).
+
+WARNING: This version of the tool is 565 days old.
+GTD-INFO: Parsing file top.mtarpt...
+Error   : No designs are available. A design must first be read in and elaborated. [TUI-10] [check_design]
+        : There is no design here.
+        : A design must first be read in with 'read_hdl' command and elaborated with 'elaborate' command.
+
+Lic Summary:
+[03:26:35.387289] Cdslmd servers: vm-fsemi-edu02-h4l0gt0b
+[03:26:35.387298] Feature usage summary:
+[03:26:35.387299] Genus_Synthesis
+
+Normal exit.
